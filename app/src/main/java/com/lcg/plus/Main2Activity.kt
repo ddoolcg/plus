@@ -28,7 +28,7 @@ class Main2Activity : AppCompatActivity() {
     companion object {
         fun start(activity: Activity) {
             val list = arrayListOf("A", "B")
-            val intent = Main2ActivityIntentBuilder(activity)
+            val intent = IntentMain2ActivityBuilder(activity)
                 .setB(true)
                 .setC(1)
                 .setList(arrayListOf("A", "B"))

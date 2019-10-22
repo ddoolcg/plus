@@ -23,7 +23,7 @@ public class IntentGenerator implements Generator {
 
     IntentGenerator(Element element) {
         this.element = element;
-        className = element.getSimpleName().toString() + Constant.ACTIVITY_INTENT;
+        className = String.format(Constant.ACTIVITY_INTENT, element.getSimpleName().toString());
         packageName = ((PackageElement) element.getEnclosingElement()).getQualifiedName()
                 .toString();
     }

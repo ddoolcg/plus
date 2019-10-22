@@ -29,7 +29,7 @@ public class WorkFragment extends Fragment {
 
     public static WorkFragment newInstance(boolean isMove, Date ctime, String cid) {
         WorkFragment fragment = new WorkFragment();
-        fragment.setArguments(new WorkFragmentBundleBuilder()
+        fragment.setArguments(new BundleWorkFragmentBuilder()
                 .setCid(cid)
                 .setCtime(ctime)
                 .setIsMove(isMove)

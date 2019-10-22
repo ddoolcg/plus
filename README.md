@@ -48,7 +48,7 @@ dependencies {
 ## 构建Main2Activity的intent
 
 ~~~kotlin
-    val intent = Main2ActivityIntentBuilder(activity)
+    val intent = IntentMain2ActivityBuilder(activity)
         .setB(true)
         .setC(1)
         .setList(arrayListOf("A", "B"))
@@ -63,7 +63,7 @@ dependencies {
 ~~~java
     public static WorkFragment newInstance(boolean isMove, Date ctime, String cid) {
         WorkFragment fragment = new WorkFragment();
-        fragment.setArguments(new WorkFragmentBundleBuilder()
+        fragment.setArguments(new BundleWorkFragmentBuilder()
                 .setCid(cid)
                 .setCtime(ctime)
                 .setIsMove(isMove)

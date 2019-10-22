@@ -4,8 +4,8 @@ import com.squareup.javapoet.ClassName;
 
 public class Constant {
     static final String ACTIVITY_AUTO_FIELD_EXTRAS = "AutoFieldExtras";
-    static final String ACTIVITY_INTENT = "IntentBuilder";
-    static final String FRAGMENT_BUNDLE = "BundleBuilder";
+    static final String ACTIVITY_INTENT = "Intent%sBuilder";
+    static final String FRAGMENT_BUNDLE = "Bundle%sBuilder";
 
     static final ClassName BUNDLE_CLASS = ClassName.get("android.os", "Bundle");
     static final ClassName NONNULL_CLASS = ClassName.get("android.support.annotation", "NonNull");

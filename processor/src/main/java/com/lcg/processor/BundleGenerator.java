@@ -18,14 +18,14 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 
 public class BundleGenerator implements Generator {
-    ProcessingEnvironment processingEnv;
+    private ProcessingEnvironment processingEnv;
     private Element element;
     private String className;
     private String packageName;
 
     BundleGenerator(ProcessingEnvironment processingEnv, Element element) {
         this.element = element;
-        className = element.getSimpleName().toString() + Constant.FRAGMENT_BUNDLE;
+        className = String.format(Constant.FRAGMENT_BUNDLE, element.getSimpleName().toString());
         packageName = ((PackageElement) element.getEnclosingElement()).getQualifiedName()
                 .toString();
         this.processingEnv = processingEnv;
