@@ -12,6 +12,16 @@
 # 关于使用
 Project目录下的build.gradle：
 ~~~gradle
+buildscript {
+    repositories {
+        ...
+        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
+    }
+    dependencies {
+        ...
+        classpath "com.pxjy.plugin:auto-field:1.0"
+    }
+}
 allprojects {
     repositories {
         ...
@@ -22,11 +32,7 @@ allprojects {
 Module目录下的build.gradle：
 ~~~gradle
 apply plugin: 'auto-field'
-
-repositories {
-     maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
-}
-
+...
 dependencies {
     implementation "com.pxjy.plugin:annotation:1.0"
 }
