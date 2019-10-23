@@ -14,7 +14,7 @@ buildscript {
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.android.tools.build:gradle-api:3.5.1'
+    implementation 'com.android.tools.build:gradle-api:3.0.0'
     implementation 'org.javassist:javassist:3.23.1-GA'
     implementation 'commons-io:commons-io:2.6'
 }
