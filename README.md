@@ -19,7 +19,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath "com.pxjy.plugin:auto-field:1.0"
+        classpath "com.pxjy.plugin:auto-field:1.1"
     }
 }
 allprojects {
@@ -32,10 +32,6 @@ allprojects {
 Module目录下的build.gradle：
 ~~~gradle
 apply plugin: 'auto-field'
-...
-dependencies {
-    implementation "com.pxjy.plugin:annotation:1.0"
-}
 ~~~
 
 

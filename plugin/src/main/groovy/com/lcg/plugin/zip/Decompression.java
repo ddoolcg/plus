@@ -44,12 +44,6 @@ public class Decompression {
         }
     }
 
-    /**
-     * 流交换操作
-     *
-     * @param ins     输入流
-     * @param channel 输出流
-     */
     private static void transferStream(InputStream ins, FileChannel channel) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024 * 10);
         ReadableByteChannel rbcInst = Channels.newChannel(ins);
@@ -78,15 +72,8 @@ public class Decompression {
             }
         }
     }
-
-    /**
-     * 打印jar文件内容信息
-     *
-     * @param file jar文件
-     */
     public static void printJarEntry(File file) {
         JarFile jfInst = null;
-        ;
         try {
             jfInst = new JarFile(file);
         } catch (IOException e) {
@@ -98,20 +85,13 @@ public class Decompression {
         }
     }
 
-    /**
-     * 创建文件
-     *
-     * @param jarEntry jar实体
-     * @param fileInst 文件实体
-     * @throws IOException 抛出异常
-     */
     public static void makeFile(JarEntry jarEntry, File fileInst) {
         if (!fileInst.exists()) {
             if (jarEntry.isDirectory()) {
                 fileInst.mkdirs();
             } else {
                 fileInst.getParentFile().mkdirs();
-                log.info("解压文件：".concat(fileInst.getPath()));
+                log.info("success:".concat(fileInst.getPath()));
             }
         }
     }
@@ -121,7 +101,6 @@ public class Decompression {
         File targetDir = new File("E:\\Base");
         try {
             Decompression.uncompress(jarFile, targetDir);
-            System.out.println("解压成功");
         } catch (IOException e) {
             e.printStackTrace();
         }

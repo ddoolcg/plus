@@ -22,7 +22,7 @@ class AutoFieldTransform extends Transform {
 
     @Override
     String getName() {
-        return "auto-data"
+        return "auto-field"
     }
 
     @Override

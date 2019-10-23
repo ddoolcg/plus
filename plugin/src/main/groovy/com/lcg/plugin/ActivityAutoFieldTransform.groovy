@@ -35,41 +35,41 @@ class ActivityAutoFieldTransform {
         }
         if (list.size() == 0) {
             if (saveCtMethod == null) {
-                // 原来的 Activity 没有 saveInstanceState 方法
+                //  Activity  have not  saveInstanceState 
                 saveCtMethod = CtNewMethod.make(generateActivitySaveMethod(), ctClass)
                 ctClass.addMethod(saveCtMethod)
             } else {
-                // 原来的 Activity 有 saveInstanceState 方法
+                //  Activity have saveInstanceState 
                 saveCtMethod.insertBefore("\$1.putAll(getIntent().getExtras());")
             }
 
             if (restoreCtMethod == null) {
-                // 原来的 Activity 没有 onCreate 方法
+                //  Activity  have not  onCreate 
                 restoreCtMethod = CtNewMethod.make(generateActivityRestoreMethod(), ctClass)
                 ctClass.addMethod(restoreCtMethod)
             } else {
-                // 原来的 Activity 有 onCreate 方法
+                //  Activity have onCreate 
                 restoreCtMethod.insertBefore("if (\$1 != null)  getIntent().putExtras(\$1);")
             }
         } else {
             if (saveCtMethod == null) {
-                // 原来的 Activity 没有 saveInstanceState 方法
+                //  Activity  have not  saveInstanceState 
                 saveCtMethod = CtNewMethod.make(generateActivitySaveMethod(
                         ctClass.name + Constant.GENERATED_FILE_SUFFIX), ctClass)
                 ctClass.addMethod(saveCtMethod)
             } else {
-                // 原来的 Activity 有 saveInstanceState 方法
+                //  Activity have saveInstanceState 
                 saveCtMethod.insertBefore(
                         "${ctClass.name}${Constant.GENERATED_FILE_SUFFIX}.onSaveInstanceState(this, \$1);")
             }
 
             if (restoreCtMethod == null) {
-                // 原来的 Activity 没有 onCreate 方法
+                //  Activity  have not  onCreate 
                 restoreCtMethod = CtNewMethod.make(generateActivityRestoreMethod(
                         ctClass.name + Constant.GENERATED_FILE_SUFFIX), ctClass)
                 ctClass.addMethod(restoreCtMethod)
             } else {
-                // 原来的 Activity 有 onCreate 方法
+                //  Activity have onCreate 
                 restoreCtMethod.insertBefore(
                         "if (\$1 != null) ${ctClass.name}${Constant.GENERATED_FILE_SUFFIX}.onRestoreInstanceState(this, \$1);"
                                 + "else ${ctClass.name}${Constant.GENERATED_FILE_SUFFIX}.onInitState(this);")
@@ -77,7 +77,6 @@ class ActivityAutoFieldTransform {
         }
     }
 
-    // Activity onCreate 不存在的情况下创建 onCreate 方法
     static String generateActivityRestoreMethod(String delegatedName) {
         return "protected void onCreate(Bundle savedInstanceState) {\n" +
                 "if (savedInstanceState != null) ${delegatedName}.onRestoreInstanceState(this, savedInstanceState);" + "\n" +
@@ -86,14 +85,12 @@ class ActivityAutoFieldTransform {
                 "}"
     }
 
-    // Activity onSaveInstanceState 不存在的情况下创建 onSaveInstanceState
     static String generateActivitySaveMethod(String delegatedName) {
         return "protected void onSaveInstanceState(Bundle outState) {\n" +
                 "${delegatedName}.onSaveInstanceState(this, outState);" + "\n" +
                 "super.onSaveInstanceState(outState);\n" +
                 "}"
     }
-    //无注解 Activity onCreate 不存在的情况下创建 onCreate 方法
     static String generateActivityRestoreMethod() {
         return "protected void onCreate(Bundle savedInstanceState) {\n" +
                 "if (savedInstanceState != null) getIntent().putExtras(savedInstanceState);" + "\n" +
@@ -101,7 +98,6 @@ class ActivityAutoFieldTransform {
                 "}"
     }
 
-    //无注解 Activity onSaveInstanceState 不存在的情况下创建 onSaveInstanceState
     static String generateActivitySaveMethod() {
         return "protected void onSaveInstanceState(Bundle outState) {\n" +
                 "super.onSaveInstanceState(outState);\n" +

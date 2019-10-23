@@ -46,12 +46,10 @@ public class Compressor {
     public void compress(String srcPathName) {
         File file = new File(srcPathName);
         if (!file.exists())
-            throw new RuntimeException(srcPathName + "不存在！");
+            throw new RuntimeException(srcPathName + " no");
         try {
             File[] sourceFiles = file.listFiles();
-            if (null == sourceFiles || sourceFiles.length < 1) {
-                System.out.println("待压缩的文件目录：" + srcPathName + "里面不存在文件，无需压缩.");
-            } else {
+            if (null != sourceFiles && sourceFiles.length >= 1) {
                 FileOutputStream fileOutputStream = new FileOutputStream(fileName);
                 CheckedOutputStream cos = new CheckedOutputStream(fileOutputStream,
                         new CRC32());
@@ -70,39 +68,22 @@ public class Compressor {
     }
 
     public void compress(File file, ZipOutputStream out, String basedir) {
-        /* 判断是目录还是文件 */
         if (file.isDirectory()) {
             this.compressDirectory(file, out, basedir);
         } else {
             this.compressFile(file, out, basedir);
         }
     }
-
-    /**
-     * 压缩目录
-     *
-     * @param dir
-     * @param out
-     * @param basedir
-     */
     private void compressDirectory(File dir, ZipOutputStream out, String basedir) {
         if (!dir.exists())
             return;
 
         File[] files = dir.listFiles();
         for (int i = 0; i < files.length; i++) {
-            /* 递归 */
             compress(files[i], out, basedir + dir.getName() + "/");
         }
     }
 
-    /**
-     * 压缩文件
-     *
-     * @param file
-     * @param out
-     * @param basedir
-     */
     private void compressFile(File file, ZipOutputStream out, String basedir) {
         if (!file.exists()) {
             return;
@@ -112,8 +93,7 @@ public class Compressor {
                     new FileInputStream(file));
             String filePath = (basedir + file.getName())
                     .replaceAll(getOriginalUrl() + "/", "");
-            //log.info("basedir:：" + basedir);
-            log.info("压缩文件：" + filePath);
+            log.info("file:" + filePath);
             ZipEntry entry = new ZipEntry(filePath);
             out.putNextEntry(entry);
             int count;
@@ -130,7 +110,6 @@ public class Compressor {
     public static void main(String[] args) {
         Compressor zc = new Compressor("E:\\Base_Crack.jar");
         zc.compress("E:\\Base\\");
-        System.out.println("压缩成功");
     }
 
     public String getOriginalUrl() {
