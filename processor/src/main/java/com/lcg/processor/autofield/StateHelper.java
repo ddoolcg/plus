@@ -1,4 +1,4 @@
-package com.lcg.processor;
+package com.lcg.processor.autofield;
 
 import com.lcg.annotation.AutoField;
 import com.squareup.javapoet.MethodSpec;

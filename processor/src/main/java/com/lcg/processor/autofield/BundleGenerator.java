@@ -1,6 +1,8 @@
-package com.lcg.processor;
+package com.lcg.processor.autofield;
 
 import com.lcg.annotation.AutoField;
+import com.lcg.processor.Constant;
+import com.lcg.processor.Generator;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -11,21 +13,24 @@ import com.squareup.javapoet.TypeSpec;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 
-public class IntentGenerator implements Generator {
+public class BundleGenerator implements Generator {
+    private ProcessingEnvironment processingEnv;
     private Element element;
     private String className;
     private String packageName;
 
-    IntentGenerator(Element element) {
+    public BundleGenerator(ProcessingEnvironment processingEnv, Element element) {
         this.element = element;
-        className = String.format(Constant.ACTIVITY_INTENT, element.getSimpleName().toString());
+        className = String.format(Constant.FRAGMENT_BUNDLE, element.getSimpleName().toString());
         packageName = ((PackageElement) element.getEnclosingElement()).getQualifiedName()
                 .toString();
+        this.processingEnv = processingEnv;
     }
 
     @Override
@@ -45,7 +50,7 @@ public class IntentGenerator implements Generator {
 
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC);
-        classBuilder.addJavadoc(element.getSimpleName().toString() + " intent builder\n@author lei.chuguang Email:475825657@qq.com from pxjy");
+        classBuilder.addJavadoc(element.getSimpleName().toString() + " bundle builder\n@author lei.chuguang Email:475825657@qq.com from pxjy");
         addMethodsAndFields(classBuilder, autoStateFields);
         // Create
         TypeSpec saveState = classBuilder.build();
@@ -54,20 +59,12 @@ public class IntentGenerator implements Generator {
 
 
     private void addMethodsAndFields(TypeSpec.Builder intentClass, List<Element> autoFieldFields) {
-        //context
-        intentClass.addField(Constant.CONTEXT_CLASS, "context", Modifier.PRIVATE);
-        //init
-        MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
-                .addParameter(Constant.CONTEXT_CLASS, "context")
-                .addStatement("this.$N = $N", "context", "context")
-                .addModifiers(Modifier.PUBLIC);
-        intentClass.addMethod(constructorBuilder.build());
         //build
         MethodSpec.Builder createMethodBuilder = MethodSpec
                 .methodBuilder("build")
-                .returns(Constant.INTENT_CLASS)
+                .returns(Constant.BUNDLE_CLASS)
                 .addModifiers(Modifier.PUBLIC);
-        createMethodBuilder.addStatement("Intent intent = new Intent(context, " + TypeName.get(element.asType()) + ".class)");
+        createMethodBuilder.addStatement("Bundle bundle = new Bundle()");
         for (Element field : autoFieldFields) {
             //field
             String pName = field.getSimpleName().toString();
@@ -84,12 +81,9 @@ public class IntentGenerator implements Generator {
             setMethod.addStatement("this.$N = $N", pName, pName);
             setMethod.addStatement("return this");
             intentClass.addMethod(setMethod.build());
-            //put
-//            createMethodBuilder.beginControlFlow("if ($N!=null)", pName);
-            StateHelper.statementSaveValueIntoIntent(createMethodBuilder, field, "intent");
-//            createMethodBuilder.endControlFlow();
+            StateHelper.statementSaveValueIntoBundle(processingEnv, createMethodBuilder, field, "bundle");
         }
-        createMethodBuilder.addStatement("return intent");
+        createMethodBuilder.addStatement("return bundle");
         intentClass.addMethod(createMethodBuilder.build());
     }
 

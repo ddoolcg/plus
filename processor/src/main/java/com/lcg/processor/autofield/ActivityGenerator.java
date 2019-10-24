@@ -1,4 +1,4 @@
-package com.lcg.processor;
+package com.lcg.processor.autofield;
 
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -11,7 +11,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 
 public class ActivityGenerator extends FragmentGenerator {
-    ActivityGenerator(ProcessingEnvironment processingEnv, boolean isKotlinClass, Element element) {
+    public ActivityGenerator(ProcessingEnvironment processingEnv, boolean isKotlinClass, Element element) {
         super(processingEnv, isKotlinClass, element);
     }
 

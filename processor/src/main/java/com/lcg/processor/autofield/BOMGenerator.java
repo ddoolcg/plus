@@ -1,6 +1,8 @@
-package com.lcg.processor;
+package com.lcg.processor.autofield;
 
 import com.lcg.annotation.AutoField;
+import com.lcg.processor.Constant;
+import com.lcg.processor.Generator;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -15,14 +17,12 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 
-import static com.lcg.processor.Constant.BUNDLE_CLASS;
+public class BOMGenerator implements Generator {
+    private Element element;
+    private boolean isKotlinClass;
+    private ProcessingEnvironment processingEnv;
 
-public class FragmentGenerator implements Generator {
-    Element element;
-    boolean isKotlinClass;
-    ProcessingEnvironment processingEnv;
-
-    FragmentGenerator(ProcessingEnvironment processingEnv, boolean isKotlinClass, Element element) {
+    public BOMGenerator(ProcessingEnvironment processingEnv, boolean isKotlinClass, Element element) {
         this.element = element;
         this.isKotlinClass = isKotlinClass;
         this.processingEnv = processingEnv;
@@ -56,31 +56,22 @@ public class FragmentGenerator implements Generator {
         return JavaFile.builder(packageName, saveState).build();
     }
 
-
-    protected void addMethodsAndFields(TypeSpec.Builder autoFieldClass, List<Element> autoFieldFields) {
-        MethodSpec.Builder saveStateMethodBuilder = MethodSpec
-                .methodBuilder("onSaveInstanceState")
+    private void addMethodsAndFields(TypeSpec.Builder autoFieldClass, List<Element> autoFieldFields) {
+        MethodSpec.Builder initMethodBuilder = MethodSpec
+                .methodBuilder("onInitState")
                 .addParameter(TypeName.get(element.asType()), "instance")
-                .addParameter(BUNDLE_CLASS, "outState")
                 .addModifiers(Modifier.STATIC);
-
+        initMethodBuilder.addStatement("$T activity = instance.getActivity()", Constant.ACTIVITY_CLASS);
+        initMethodBuilder.beginControlFlow("if (activity!=null)");
+        initMethodBuilder.addStatement("$T extras = activity.getIntent().getExtras()", Constant.BUNDLE_CLASS);
+        initMethodBuilder.beginControlFlow("if (extras!=null)");
         for (Element field : autoFieldFields) {
-            StateHelper.statementSaveValueIntoBundle(processingEnv, isKotlinClass, saveStateMethodBuilder,
-                    field, "instance", "outState");
+            StateHelper.statementGetValueFromBundle(processingEnv, isKotlinClass, initMethodBuilder,
+                    field, "instance", "extras");
         }
-        autoFieldClass.addMethod(saveStateMethodBuilder.build());
-        //
-        MethodSpec.Builder restoreStateMethodBuilder = MethodSpec
-                .methodBuilder("onRestoreInstanceState")
-                .addParameter(TypeName.get(element.asType()), "instance")
-                .addParameter(BUNDLE_CLASS, "savedInstanceState")
-                .addModifiers(Modifier.STATIC);
-
-        for (Element field : autoFieldFields) {
-            StateHelper.statementGetValueFromBundle(processingEnv, isKotlinClass, restoreStateMethodBuilder,
-                    field, "instance", "savedInstanceState");
-        }
-        autoFieldClass.addMethod(restoreStateMethodBuilder.build());
+        initMethodBuilder.endControlFlow();
+        initMethodBuilder.endControlFlow();
+        autoFieldClass.addMethod(initMethodBuilder.build());
     }
 
 }
