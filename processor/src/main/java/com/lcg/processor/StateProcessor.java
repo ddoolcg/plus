@@ -2,6 +2,11 @@ package com.lcg.processor;
 
 import com.google.auto.service.AutoService;
 import com.lcg.annotation.AutoField;
+import com.lcg.processor.autofield.ActivityGenerator;
+import com.lcg.processor.autofield.BOMGenerator;
+import com.lcg.processor.autofield.BundleGenerator;
+import com.lcg.processor.autofield.FragmentGenerator;
+import com.lcg.processor.autofield.IntentGenerator;
 import com.squareup.javapoet.JavaFile;
 
 import java.io.IOException;
@@ -67,19 +72,24 @@ public class StateProcessor extends AbstractProcessor {
             }
 
             Generator generator;
-            Generator generator1;
+            Generator generator1 = null;
             if (checkIsSubClassOf(element, Constant.CLASS_ACTIVITY, Constant.CLASS_FRAGMENT_ACTIVITY)) {
                 generator = new ActivityGenerator(processingEnv, isKotlinClass, element);
                 generator1 = new IntentGenerator(element);
             } else if (checkIsSubClassOf(element, Constant.CLASS_V4_FRAGMENT, Constant.CLASS_FRAGMENT)) {
                 generator = new FragmentGenerator(processingEnv, isKotlinClass, element);
                 generator1 = new BundleGenerator(processingEnv, element);
+            } else if (checkIsSubClassOf(element, Constant.CLASS_BASE_OBSERVABLE_ME)) {
+                generator = new BOMGenerator(processingEnv, isKotlinClass, element);
             } else {
                 continue;
             }
 
             JavaFile javaFile = generator.createSourceFile();
-            JavaFile javaFile1 = generator1.createSourceFile();
+            JavaFile javaFile1 = null;
+            if (generator1 != null) {
+                javaFile1 = generator1.createSourceFile();
+            }
             // Finally, write the source to file
             try {
                 if (javaFile != null) {

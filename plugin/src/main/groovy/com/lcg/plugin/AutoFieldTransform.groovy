@@ -10,6 +10,7 @@ import javassist.ClassPool
 import javassist.CtClass
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
+import org.gradle.internal.impldep.com.sun.xml.bind.v2.TODO
 
 import java.lang.reflect.Constructor
 
@@ -170,6 +171,13 @@ class AutoFieldTransform extends Transform {
         CtClass activityCtClass = classPool.get("android.app.Activity")
         CtClass fragmentCtClass = classPool.get("android.app.Fragment")
 
+        CtClass ObservableCtClass
+        try {
+            ObservableCtClass = classPool.get("com.lcg.mylibrary.BaseObservableMe")
+        } catch (Throwable t) {
+            //v4
+        }
+
         if (!file.name.endsWith("class")) {
             return false
         }
@@ -189,6 +197,10 @@ class AutoFieldTransform extends Transform {
             handled = true
         } else if (ctClass.subclassOf(fragmentCtClass) || (v4FragmentCtClass != null && ctClass.subclassOf(v4FragmentCtClass))) {
             FragmentAutoFieldTransform transform = new FragmentAutoFieldTransform(ctClass, classPool, mProject)
+            transform.handleFragmentSaveState()
+            handled = true
+        } else if (ObservableCtClass != null && ctClass.subclassOf(ObservableCtClass)) {
+            ObserverAutoFieldTransform transform = new ObserverAutoFieldTransform(ctClass, classPool, mProject)
             transform.handleFragmentSaveState()
             handled = true
         }

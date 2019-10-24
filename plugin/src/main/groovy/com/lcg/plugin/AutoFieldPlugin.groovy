@@ -10,15 +10,16 @@ class AutoFieldPlugin implements Plugin<Project> {
 
         if (project.plugins.hasPlugin("com.android.application")
                 || project.plugins.hasPlugin("com.android.library")) {
+            def ver = "1.2"
             if (project.plugins.hasPlugin("kotlin-android")) {
                 project.dependencies {
-                    kapt "com.pxjy.plugin:processor:1.1"
-                    implementation "com.pxjy.plugin:annotation:1.1"
+                    kapt "com.pxjy.plugin:processor:$ver"
+                    implementation "com.pxjy.plugin:annotation:$ver"
                 }
             } else {
                 project.dependencies {
-                    annotationProcessor "com.pxjy.plugin:processor:1.1"
-                    implementation "com.pxjy.plugin:annotation:1.1"
+                    annotationProcessor "com.pxjy.plugin:processor:$ver"
+                    implementation "com.pxjy.plugin:annotation:$ver"
                 }
             }
 

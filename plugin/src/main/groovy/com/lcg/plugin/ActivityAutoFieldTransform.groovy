@@ -27,13 +27,15 @@ class ActivityAutoFieldTransform {
             it.name == "onCreate" && it.parameterTypes == [bundleCtClass] as CtClass[]
         }
 
-        def list = []
-        ctClass.declaredFields.each { field ->
+        def none = true
+        for (field in ctClass.declaredFields) {
             if (field.hasAnnotation("com.lcg.annotation.AutoField")) {
-                list.add(field)
+                none = false
+                break
             }
         }
-        if (list.size() == 0) {
+        //
+        if (none) {
             if (saveCtMethod == null) {
                 //  Activity  have not  saveInstanceState 
                 saveCtMethod = CtNewMethod.make(generateActivitySaveMethod(), ctClass)
@@ -91,6 +93,7 @@ class ActivityAutoFieldTransform {
                 "super.onSaveInstanceState(outState);\n" +
                 "}"
     }
+
     static String generateActivityRestoreMethod() {
         return "protected void onCreate(Bundle savedInstanceState) {\n" +
                 "if (savedInstanceState != null) getIntent().putExtras(savedInstanceState);" + "\n" +

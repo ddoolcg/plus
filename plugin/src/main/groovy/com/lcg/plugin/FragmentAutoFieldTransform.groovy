@@ -31,14 +31,15 @@ class FragmentAutoFieldTransform {
             it.name == "onCreateView" && it.parameterTypes == [inflaterCtClass, viewGroupCtClass, bundleCtClass] as CtClass[]
         }
 
-        def list = []
-        ctClass.declaredFields.each { field ->
+        def create = false
+        for (field in ctClass.declaredFields) {
             if (field.hasAnnotation("com.lcg.annotation.AutoField")) {
-                list.add(field)
+                create = true
+                break
             }
         }
         //
-        if (list.size() > 0) {
+        if (create) {
             if (saveCtMethod == null) {
                 //  Fragment have not saveInstanceState
                 saveCtMethod = CtNewMethod.make(generateFragmentSaveMethod(

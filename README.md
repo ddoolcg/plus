@@ -19,7 +19,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath "com.pxjy.plugin:auto-field:1.1"
+        classpath "com.pxjy.plugin:auto-field:1.2"
     }
 }
 allprojects {
@@ -35,7 +35,7 @@ apply plugin: 'auto-field'
 ~~~
 
 
-## 在field使用
+## 在field使用（支持Activity、Fragment、以及QAndroid的BaseObservableMe实现）
 
 ~~~kotlin
     @AutoField
