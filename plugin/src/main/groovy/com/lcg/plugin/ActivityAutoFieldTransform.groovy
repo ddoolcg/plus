@@ -42,7 +42,8 @@ class ActivityAutoFieldTransform {
                 ctClass.addMethod(saveCtMethod)
             } else {
                 //  Activity have saveInstanceState 
-                saveCtMethod.insertBefore("\$1.putAll(getIntent().getExtras());")
+                saveCtMethod.insertBefore("Bundle extras = getIntent().getExtras();\n" +
+                        "if (extras!=null) \$1.putAll(extras);")
             }
 
             if (restoreCtMethod == null) {
@@ -102,9 +103,11 @@ class ActivityAutoFieldTransform {
     }
 
     static String generateActivitySaveMethod() {
-        return "protected void onSaveInstanceState(Bundle outState) {\n" +
-                "super.onSaveInstanceState(outState);\n" +
-                "outState.putAll(getIntent().getExtras());\n" +
+        return "protected void onRestoreInstanceState(Bundle savedInstanceState) {\n" +
+                "super.onRestoreInstanceState(savedInstanceState);\n" +
+                "Bundle extras = getIntent().getExtras();\n" +
+                "if (extras!=null)\n" +
+                "savedInstanceState.putAll(extras);\n" +
                 "}"
     }
 }
