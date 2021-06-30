@@ -7,10 +7,9 @@ class AutoFieldPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-
         if (project.plugins.hasPlugin("com.android.application")
                 || project.plugins.hasPlugin("com.android.library")) {
-            def ver = "1.3"
+            def ver = "2.2"
             if (project.plugins.hasPlugin("kotlin-android")) {
                 project.dependencies {
                     kapt "com.pxjy.plugin:processor:$ver"

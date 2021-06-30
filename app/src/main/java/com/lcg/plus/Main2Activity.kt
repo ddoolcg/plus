@@ -6,6 +6,7 @@ import android.databinding.Bindable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.lcg.annotation.AutoField
+import com.lcg.annotation.Route
 
 class Main2Activity : AppCompatActivity() {
     @AutoField("sadas")
@@ -26,7 +27,9 @@ class Main2Activity : AppCompatActivity() {
     }
 
     companion object {
-        fun start(activity: Activity) {
+        @Route("b")
+        @JvmOverloads
+        fun start(activity: Activity, c: Int=0) {
             val list = arrayListOf("A", "B")
             val intent = IntentMain2ActivityBuilder(activity)
                 .setB(true)

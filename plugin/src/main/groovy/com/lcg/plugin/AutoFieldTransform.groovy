@@ -10,7 +10,6 @@ import javassist.ClassPool
 import javassist.CtClass
 import org.apache.commons.io.FileUtils
 import org.gradle.api.Project
-import org.gradle.internal.impldep.com.sun.xml.bind.v2.TODO
 
 import java.lang.reflect.Constructor
 
@@ -54,8 +53,9 @@ class AutoFieldTransform extends Transform {
     @Override
     void transform(TransformInvocation transformInvocation) throws TransformException, InterruptedException, IOException {
         ClassPool classPool = ClassPool.getDefault()
-        def classPath = []
+        classPool.importPackage("android.os.Bundle")
         classPool.appendClassPath(mProject.android.bootClasspath[0].toString())
+        def classPath = []
         try {
             Class jarClassPathClazz = Class.forName("javassist.JarClassPath")
             Constructor constructor = jarClassPathClazz.getDeclaredConstructor(String.class)
@@ -150,23 +150,40 @@ class AutoFieldTransform extends Transform {
             classPath.each { it ->
                 classPool.removeClassPath(it)
             }
+            def iterator = classPool.importedPackages
+            while (iterator.hasNext()) {
+                if ("android.os.Bundle" == iterator.next()) {
+                    iterator.remove()
+                    break
+                }
+            }
         }
-
     }
 
-
     boolean checkAndTransformClass(ClassPool classPool, File file, File dest) {
-        classPool.importPackage("android.os.Bundle")
-        classPool.importPackage("android.view.LayoutInflater")
-        classPool.importPackage("android.view.ViewGroup")
-
-        CtClass fragmentActivityCtClass
+        if (!file.name.endsWith("class")) {
+            return false
+        }
+        println(file.name)
+        CtClass ctClass
+        try {
+            ctClass = classPool.makeClass(new FileInputStream(file))
+        } catch (Throwable throwable) {
+            mProject.logger.error("Parsing class file ${file.getAbsolutePath()} fail.", throwable)
+            return false
+        }
+        //
         CtClass v4FragmentCtClass
         try {
-            fragmentActivityCtClass = classPool.get("android.support.v4.app.FragmentActivity")
             v4FragmentCtClass = classPool.get("android.support.v4.app.Fragment")
         } catch (Throwable t) {
             //v4
+        }
+        CtClass xFragmentCtClass
+        try {
+            xFragmentCtClass = classPool.get("androidx.fragment.app.Fragment")
+        } catch (Throwable t) {
+            //androidx
         }
         CtClass activityCtClass = classPool.get("android.app.Activity")
         CtClass fragmentCtClass = classPool.get("android.app.Fragment")
@@ -175,27 +192,15 @@ class AutoFieldTransform extends Transform {
         try {
             ObservableCtClass = classPool.get("com.lcg.mylibrary.BaseObservableMe")
         } catch (Throwable t) {
-            //v4
-        }
-
-        if (!file.name.endsWith("class")) {
-            return false
-        }
-
-        CtClass ctClass
-        try {
-            ctClass = classPool.makeClass(new FileInputStream(file))
-        } catch (Throwable throwable) {
-            mProject.logger.error("Parsing class file ${file.getAbsolutePath()} fail.", throwable)
-            return false
+            //mylibrary
         }
         // Support Activity and AppCompatActivity
         boolean handled
-        if (ctClass.subclassOf(activityCtClass) || (fragmentActivityCtClass != null && ctClass.subclassOf(fragmentActivityCtClass))) {
+        if (ctClass.subclassOf(activityCtClass)) {
             ActivityAutoFieldTransform transform = new ActivityAutoFieldTransform(mProject, ctClass, classPool)
             transform.handleActivitySaveState()
             handled = true
-        } else if (ctClass.subclassOf(fragmentCtClass) || (v4FragmentCtClass != null && ctClass.subclassOf(v4FragmentCtClass))) {
+        } else if (ctClass.subclassOf(fragmentCtClass) || (xFragmentCtClass != null && ctClass.subclassOf(xFragmentCtClass)) || (v4FragmentCtClass != null && ctClass.subclassOf(v4FragmentCtClass))) {
             FragmentAutoFieldTransform transform = new FragmentAutoFieldTransform(ctClass, classPool, mProject)
             transform.handleFragmentSaveState()
             handled = true

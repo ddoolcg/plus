@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
         tv.performClick()
         tv.setOnLongClickListener {
-            Main2Activity.start(this)
+            Main2Activity.start(this,1)
             Main3Activity.start(this)
             true
         }

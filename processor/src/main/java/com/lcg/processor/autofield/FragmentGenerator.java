@@ -65,7 +65,7 @@ public class FragmentGenerator implements Generator {
                 .addParameter(TypeName.get(element.asType()), "instance")
                 .addParameter(BUNDLE_CLASS, "outState")
                 .addModifiers(Modifier.STATIC);
-
+        //
         for (Element field : autoFieldFields) {
             StateHelper.statementSaveValueIntoBundle(processingEnv, isKotlinClass, saveStateMethodBuilder,
                     field, "instance", "outState");

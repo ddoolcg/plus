@@ -6,10 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * activity fragment自动恢复存储
+ * 路由
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.FIELD)
-public @interface AutoField {
-    String value() default "";
+@Target(ElementType.METHOD)
+public @interface Route {
+    /**
+     * path
+     */
+    String value();
 }

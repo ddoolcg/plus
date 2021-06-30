@@ -71,8 +71,7 @@ public class BundleGenerator implements Generator {
             TypeName typeName = TypeName.get(field.asType());
             intentClass.addField(typeName, pName, Modifier.PRIVATE);
             //set
-            ParameterSpec parameter = ParameterSpec.builder(typeName, pName)
-                    .addAnnotation(Constant.NONNULL_CLASS).build();
+            ParameterSpec parameter = ParameterSpec.builder(typeName, pName).build();
             MethodSpec.Builder setMethod = MethodSpec
                     .methodBuilder("set" + upperFirstChar(pName))
                     .returns(ClassName.get(packageName, className))

@@ -12,6 +12,9 @@ import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 
 class StateHelper {
+    /**
+     * 提供给Intent Builder
+     */
     static void statementSaveValueIntoIntent(MethodSpec.Builder methodBuilder, Element element,
                                              String intent) {
         String varName = element.getSimpleName().toString();
@@ -19,6 +22,22 @@ class StateHelper {
         if (name.isEmpty()) name = varName;
         //
         String statement = String.format("%s.putExtra(%s, %s)", intent, "\"" + name + "\"", varName);
+
+        methodBuilder.addStatement(statement);
+    }
+
+    /**
+     * 范围更广
+     */
+    static void statementSaveValueIntoIntent(boolean isKotlinClass, MethodSpec.Builder methodBuilder, Element element,
+                                             String instance, String intent) {
+        String varName = element.getSimpleName().toString();
+        String name = element.getAnnotation(AutoField.class).value();
+        if (name.isEmpty()) name = varName;
+        //
+        boolean isKotlinField = isKotlinClass && isKotlinField(element);
+        String statement = String.format("%s.putExtra(%s, %s)", intent, "\"" + name + "\"",
+                getStatement(isKotlinField, instance, varName));
 
         methodBuilder.addStatement(statement);
     }
