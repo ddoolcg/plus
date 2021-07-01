@@ -67,53 +67,44 @@ class AutoFieldTransform extends Transform {
                     ClassPath clazzPath = (ClassPath) constructor.newInstance(jarInput.file.absolutePath)
                     classPath.add(clazzPath)
                     classPool.appendClassPath(clazzPath)
-
-                    def jarName = jarInput.name
-                    if (jarName.endsWith(".jar")) {
-                        jarName = jarName.substring(0, jarName.length() - 4)
-                    }
-                    if (jarName.startsWith(":")) {
+                    //
+                    if (isSubProject(jarInput)) {
                         subProjectInputs.add(jarInput)
                     } else {
+                        def jarName = jarInput.name
+                        if (jarName.endsWith(".jar")) {
+                            jarName = jarName.substring(0, jarName.length() - 4)
+                        }
                         def dest = transformInvocation.outputProvider.getContentLocation(jarName, jarInput.contentTypes, jarInput.scopes, Format.JAR)
                         FileUtils.copyFile(jarInput.file, dest)
                     }
                 }
 
-                // Handle library project jar here
+                // sub project
                 subProjectInputs.each { jarInput ->
                     def jarName = jarInput.name
                     if (jarName.endsWith(".jar")) {
                         jarName = jarName.substring(0, jarName.length() - 4)
                     }
-
-                    if (jarName.startsWith(":")) {
-                        // sub project
-                        File unzipDir = new File(jarInput.file.getParent(), jarName.replace(":", "") + "_unzip")
-                        if (unzipDir.exists()) {
-                            unzipDir.delete()
-                        }
-                        unzipDir.mkdirs()
-                        Decompression.uncompress(jarInput.file, unzipDir)
-
-                        File repackageFolder = new File(
-                                jarInput.file.getParent(),
-                                jarName.replace(":", "") + "_repackage"
-                        )
-
-                        FileUtils.copyDirectory(unzipDir, repackageFolder)
-
-                        unzipDir.eachFileRecurse(FileType.FILES) { File it ->
-                            checkAndTransformClass(classPool, it, repackageFolder)
-                        }
-
-                        // re-package the folder to jar
-                        def dest = transformInvocation.outputProvider.getContentLocation(
-                                jarName, jarInput.contentTypes, jarInput.scopes, Format.JAR)
-
-                        Compressor zc = new Compressor(dest.getAbsolutePath())
-                        zc.compress(repackageFolder.getAbsolutePath())
+                    File unzipDir = new File(jarInput.file.getParent(), jarName.replace(":", "") + "_unzip")
+                    if (unzipDir.exists()) {
+                        unzipDir.delete()
                     }
+                    unzipDir.mkdirs()
+                    Decompression.uncompress(jarInput.file, unzipDir)
+
+                    File repackageFolder = new File(jarInput.file.getParent(), jarName.replace(":", "") + "_repackage")
+
+                    FileUtils.copyDirectory(unzipDir, repackageFolder)
+
+                    unzipDir.eachFileRecurse(FileType.FILES) { File it ->
+                        checkAndTransformClass(classPool, it, repackageFolder)
+                    }
+                    // re-package the folder to jar
+                    def dest = transformInvocation.outputProvider.getContentLocation(
+                            jarName, jarInput.contentTypes, jarInput.scopes, Format.JAR)
+                    Compressor zc = new Compressor(dest.getAbsolutePath())
+                    zc.compress(repackageFolder.getAbsolutePath())
                 }
 
                 input.directoryInputs.each { dirInput ->
@@ -159,12 +150,16 @@ class AutoFieldTransform extends Transform {
             }
         }
     }
+    /**is sub project*/
+    static boolean isSubProject(JarInput input) {
+        def absolutePath = input.file.absolutePath
+        return absolutePath.contains("${File.separatorChar}build${File.separatorChar}intermediates${File.separatorChar}runtime_library_classes")
+    }
 
     boolean checkAndTransformClass(ClassPool classPool, File file, File dest) {
         if (!file.name.endsWith("class")) {
             return false
         }
-        println(file.name)
         CtClass ctClass
         try {
             ctClass = classPool.makeClass(new FileInputStream(file))

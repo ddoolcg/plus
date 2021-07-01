@@ -19,7 +19,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath "com.pxjy.plugin:auto-field:2.2"
+        classpath "com.pxjy.plugin:auto-field:2.6"
     }
 }
 allprojects {

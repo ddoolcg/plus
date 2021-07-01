@@ -42,6 +42,7 @@ public class Decompression {
             InputStream ins = jfInst.getInputStream(jarEntry);
             transferStream(ins, fileChannel);
         }
+        jfInst.close();
     }
 
     private static void transferStream(InputStream ins, FileChannel channel) {
