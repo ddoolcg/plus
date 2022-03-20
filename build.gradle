@@ -6,7 +6,7 @@ buildscript {
         google()
         jcenter()
         maven { url './repo' }
-        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
+//        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.1'
@@ -23,7 +23,7 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
         maven { url '../repo' }
-        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
+//        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
     }
 }
 
