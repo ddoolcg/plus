@@ -1,11 +1,9 @@
 # AutoField插件
 
-*版本号：V1.0*
+*版本号：V2.6*
 
 **本开源库包含四个部分：注解、APT、plugin和一个APP demo。**
 
-
-![朴新](http://pxjy.com/images/logo.png "朴新")
 
 开源库的使用APT、javassist动态生成代码实现，解决重复写activity、fragment数据传递和存储的代码痛点。
 
@@ -15,7 +13,7 @@ Project目录下的build.gradle：
 buildscript {
     repositories {
         ...
-        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
+         maven { url 'https://gitee.com/leicg/plus/raw/master/repo' }
     }
     dependencies {
         ...
@@ -25,7 +23,7 @@ buildscript {
 allprojects {
     repositories {
         ...
-        maven { url 'http://test.nexus.pxjy.com/repository/maven-releases/' }
+         maven { url 'https://gitee.com/leicg/plus/raw/master/repo' }
     }
 }
 ~~~
