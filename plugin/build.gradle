@@ -1,8 +1,8 @@
-group GROUP
-version VERSION
+group group
+version version
 
 apply plugin: 'groovy'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 buildscript {
 
     repositories {
@@ -19,16 +19,18 @@ dependencies {
     implementation 'commons-io:commons-io:2.6'
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.artifactId = 'auto-field'
-            if (debug == "1") {
-                repository(url: uri('../repo'))
-            } else {
-                repository(url: uri('http://test.nexus.pxjy.com/repository/maven-releases/')) {
-                    authentication(userName: "$userName", password: "$password")
-                }
+afterEvaluate {
+    publishing {
+//    配置maven-publishing插件的输出物
+        publications {
+            maven(MavenPublication) {
+                artifactId = 'auto-field'
+                from components.java
+            }
+        }
+        repositories {
+            maven {
+                url = layout.projectDirectory.dir('../repo')
             }
         }
     }
