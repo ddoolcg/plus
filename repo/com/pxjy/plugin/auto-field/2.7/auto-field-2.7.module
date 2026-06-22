@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.pxjy.plugin",
+    "module": "auto-field",
+    "version": "2.7",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "auto-field-2.7.jar",
+          "url": "auto-field-2.7.jar",
+          "size": 52096,
+          "sha512": "84f029d103702bde64ef2a187198c6ccb92042feeb7e3e614a11cd4b641b6a18578cb6cc318666f44f8627f72a3d8c0177aed1f6b5c6b49c5db87ea61ccd9ed8",
+          "sha256": "f2a96d5b652b90bc6b213262bc609bb889ad3fd593228396b5bb84128794b12a",
+          "sha1": "fc9540cd43513778d6d6984608bf01b8049d91e5",
+          "md5": "3026e73d96bdfd28c155c6d55477f2bd"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 17,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.android.tools.build",
+          "module": "gradle-api",
+          "version": {
+            "requires": "3.0.0"
+          }
+        },
+        {
+          "group": "org.javassist",
+          "module": "javassist",
+          "version": {
+            "requires": "3.23.1-GA"
+          }
+        },
+        {
+          "group": "commons-io",
+          "module": "commons-io",
+          "version": {
+            "requires": "2.6"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "auto-field-2.7.jar",
+          "url": "auto-field-2.7.jar",
+          "size": 52096,
+          "sha512": "84f029d103702bde64ef2a187198c6ccb92042feeb7e3e614a11cd4b641b6a18578cb6cc318666f44f8627f72a3d8c0177aed1f6b5c6b49c5db87ea61ccd9ed8",
+          "sha256": "f2a96d5b652b90bc6b213262bc609bb889ad3fd593228396b5bb84128794b12a",
+          "sha1": "fc9540cd43513778d6d6984608bf01b8049d91e5",
+          "md5": "3026e73d96bdfd28c155c6d55477f2bd"
+        }
+      ]
+    }
+  ]
+}

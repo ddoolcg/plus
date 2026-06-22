@@ -5,8 +5,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
 afterEvaluate {
     publishing {
 //    配置maven-publishing插件的输出物

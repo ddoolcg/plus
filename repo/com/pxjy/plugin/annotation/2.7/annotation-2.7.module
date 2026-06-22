@@ -1,0 +1,60 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.pxjy.plugin",
+    "module": "annotation",
+    "version": "2.7",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "annotation-2.7.jar",
+          "url": "annotation-2.7.jar",
+          "size": 1355,
+          "sha512": "3ebbdb8b4128ec0aeed4b467c9d68aa1cbf474fa297c2d1d4515a4aed48aabdcea4f33b02132099f07d839d38e9a5bc2292b9a94ed26e160c797c4ca45f8b467",
+          "sha256": "db4184909f1119b846916f8a2eb642d48d4bc525675e2a825f62ce92d4fe3854",
+          "sha1": "71f47017ec9a09ac635a59df39e423bacbb988c1",
+          "md5": "d706a913f49ca7a9a9bd42d1fdd2c44c"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "files": [
+        {
+          "name": "annotation-2.7.jar",
+          "url": "annotation-2.7.jar",
+          "size": 1355,
+          "sha512": "3ebbdb8b4128ec0aeed4b467c9d68aa1cbf474fa297c2d1d4515a4aed48aabdcea4f33b02132099f07d839d38e9a5bc2292b9a94ed26e160c797c4ca45f8b467",
+          "sha256": "db4184909f1119b846916f8a2eb642d48d4bc525675e2a825f62ce92d4fe3854",
+          "sha1": "71f47017ec9a09ac635a59df39e423bacbb988c1",
+          "md5": "d706a913f49ca7a9a9bd42d1fdd2c44c"
+        }
+      ]
+    }
+  ]
+}

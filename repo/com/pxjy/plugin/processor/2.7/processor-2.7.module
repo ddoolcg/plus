@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.pxjy.plugin",
+    "module": "processor",
+    "version": "2.7",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api"
+      },
+      "files": [
+        {
+          "name": "processor-2.7.jar",
+          "url": "processor-2.7.jar",
+          "size": 29908,
+          "sha512": "7e87b5c16b2abbc3768be152558fa913e24695f845212715ec915053700dc1b1ae771a9c5f8c31954816e462d965fda5e98f888b705ca7a0338f6731225d4ee4",
+          "sha256": "44b7c21888547525219bafb86d0f460c450c7d80a6ddcc2a621f56f400ba3856",
+          "sha1": "fbdb3c554fa5a8f791f5483c3a1e1d0190e7e019",
+          "md5": "3775b474b05cc8e3480910b7a6682739"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 7,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.auto.service",
+          "module": "auto-service",
+          "version": {
+            "requires": "1.0-rc4"
+          }
+        },
+        {
+          "group": "com.squareup",
+          "module": "javapoet",
+          "version": {
+            "requires": "1.9.0"
+          }
+        },
+        {
+          "group": "com.pxjy.plugin",
+          "module": "annotation",
+          "version": {
+            "requires": "2.7"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "processor-2.7.jar",
+          "url": "processor-2.7.jar",
+          "size": 29908,
+          "sha512": "7e87b5c16b2abbc3768be152558fa913e24695f845212715ec915053700dc1b1ae771a9c5f8c31954816e462d965fda5e98f888b705ca7a0338f6731225d4ee4",
+          "sha256": "44b7c21888547525219bafb86d0f460c450c7d80a6ddcc2a621f56f400ba3856",
+          "sha1": "fbdb3c554fa5a8f791f5483c3a1e1d0190e7e019",
+          "md5": "3775b474b05cc8e3480910b7a6682739"
+        }
+      ]
+    }
+  ]
+}
