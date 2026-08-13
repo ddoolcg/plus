@@ -12,7 +12,6 @@ public class Constant {
     public static final ClassName CONTEXT_CLASS = ClassName.get("android.content", "Context");
     public static final ClassName ACTIVITY_CLASS = ClassName.get("android.app", "Activity");
     public static final ClassName URI_CLASS = ClassName.get("android.net", "Uri");
-    public static final ClassName BASE_ACTIVITY_CLASS = ClassName.get("com.lcg.mylibrary", "BaseActivity");
     public static final ClassName SET_CLASS = ClassName.get("java.util", "Set");
     public static final ClassName LIST_CLASS = ClassName.get("java.util", "List");
     public static final ClassName ARRAYS_CLASS = ClassName.get("java.util", "Arrays");

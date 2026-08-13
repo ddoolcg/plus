@@ -34,7 +34,7 @@ public class RouteGenerator {
         //
         methodBuilder = MethodSpec
                 .methodBuilder("start")
-                .addParameter(Constant.BASE_ACTIVITY_CLASS, "activity")
+                .addParameter(Constant.ACTIVITY_CLASS, "activity")
                 .addParameter(Constant.URI_CLASS, "uri")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .returns(TypeName.BOOLEAN);

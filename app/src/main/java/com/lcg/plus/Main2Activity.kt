@@ -1,10 +1,10 @@
 package com.lcg.plus
 
 import android.app.Activity
-import android.databinding.BaseObservable
-import android.databinding.Bindable
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import com.lcg.annotation.AutoField
 import com.lcg.annotation.Route
 

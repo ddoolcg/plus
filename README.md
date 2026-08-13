@@ -1,6 +1,6 @@
 # AutoField插件
 
-*版本号：V2.6*
+*版本号：V3.0*
 
 **本开源库包含四个部分：注解、APT、plugin和一个APP demo。**
 
@@ -17,7 +17,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath "com.pxjy.plugin:auto-field:2.6"
+        classpath "com.lcg.plugin:auto-field:3.0"
     }
 }
 allprojects {

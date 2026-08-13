@@ -3,6 +3,18 @@ version version
 
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
+
+sourceSets {
+    main {
+        groovy {
+            exclude 'com/lcg/plugin/AutoFieldTransform.groovy'
+            exclude 'com/lcg/plugin/ActivityAutoFieldTransform.groovy'
+            exclude 'com/lcg/plugin/FragmentAutoFieldTransform.groovy'
+            exclude 'com/lcg/plugin/ObserverAutoFieldTransform.groovy'
+        }
+    }
+}
+
 buildscript {
 
     repositories {
@@ -15,8 +27,9 @@ dependencies {
     implementation gradleApi()
     implementation localGroovy()
     implementation 'com.android.tools.build:gradle-api:9.1.0'
-    implementation 'org.javassist:javassist:3.23.1-GA'
-    implementation 'commons-io:commons-io:2.21.0'
+    implementation 'org.ow2.asm:asm-tree:9.7.1'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.ow2.asm:asm-util:9.7.1'
 }
 
 afterEvaluate {

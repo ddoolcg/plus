@@ -1,9 +1,9 @@
 package com.lcg.plus
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.lcg.annotation.AutoField
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     @AutoField
@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val tv = findViewById<TextView>(R.id.tv)
         tv.setOnClickListener {
             a++
             try {

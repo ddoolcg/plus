@@ -1,12 +1,14 @@
 package com.lcg.plus;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.lcg.annotation.AutoField;
 
@@ -41,14 +43,13 @@ public class WorkFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
             Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            isMove = arguments.getBoolean("isMove", false);
-            ctime = (Date) arguments.getSerializable("ctime");
-            cid = arguments.getString("cid");
-        }
         TextView tv = new TextView(inflater.getContext());
         tv.setText(isMove + "----" + ctime + "-----" + cid);
         return tv;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
