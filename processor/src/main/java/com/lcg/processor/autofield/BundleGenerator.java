@@ -50,7 +50,7 @@ public class BundleGenerator implements Generator {
 
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className)
                 .addModifiers(Modifier.PUBLIC);
-        classBuilder.addJavadoc(element.getSimpleName().toString() + " bundle builder\n@author lei.chuguang Email:475825657@qq.com from pxjy");
+        classBuilder.addJavadoc(element.getSimpleName().toString() + " bundle builder\n@author lei.chuguang Email:475825657@qq.com");
         addMethodsAndFields(classBuilder, autoStateFields);
         // Create
         TypeSpec saveState = classBuilder.build();

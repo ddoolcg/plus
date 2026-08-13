@@ -51,7 +51,7 @@ public class FragmentGenerator implements Generator {
 
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(className + Constant.ACTIVITY_AUTO_FIELD_EXTRAS)
                 .addModifiers(Modifier.FINAL);
-        classBuilder.addJavadoc("automatically use\n@author lei.chuguang Email:475825657@qq.com from pxjy");
+        classBuilder.addJavadoc("automatically use\n@author lei.chuguang Email:475825657@qq.com");
         addMethodsAndFields(classBuilder, autoStateFields);
         // Create
         TypeSpec saveState = classBuilder.build();

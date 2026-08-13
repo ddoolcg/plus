@@ -23,13 +23,13 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 
 public class RouteGenerator {
-    private TypeMirror typeBaseActivity;
-    private Types typeUtils;
-    private MethodSpec.Builder methodBuilder;
-    private HashMap<String, ArrayList<ExecutableElement>> map = new HashMap<>();
+    private final TypeMirror typeActivity;
+    private final Types typeUtils;
+    private final MethodSpec.Builder methodBuilder;
+    private final HashMap<String, ArrayList<ExecutableElement>> map = new HashMap<>();
 
     public RouteGenerator(ProcessingEnvironment processingEnv) {
-        typeBaseActivity = processingEnv.getElementUtils().getTypeElement(Constant.CLASS_ACTIVITY).asType();
+        typeActivity = processingEnv.getElementUtils().getTypeElement(Constant.CLASS_ACTIVITY).asType();
         typeUtils = processingEnv.getTypeUtils();
         //
         methodBuilder = MethodSpec
@@ -40,6 +40,7 @@ public class RouteGenerator {
                 .returns(TypeName.BOOLEAN);
         methodBuilder.addStatement("String path = uri.getPath()");
         methodBuilder.addStatement("$T<String> names = uri.getQueryParameterNames()", Constant.SET_CLASS);
+        methodBuilder.addStatement("$T<String> strings", Constant.LIST_CLASS);
     }
 
     public void addElement(Element element) {
@@ -55,7 +56,7 @@ public class RouteGenerator {
                 boolean isSubType = false;
                 for (VariableElement parameter : parameters) {
                     try {
-                        isSubType = typeUtils.isSubtype(parameter.asType(), typeBaseActivity);
+                        isSubType = typeUtils.isSubtype(parameter.asType(), typeActivity);
                         if (isSubType) break;
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
@@ -90,7 +91,7 @@ public class RouteGenerator {
     public JavaFile createSourceFile() {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder("Route")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        classBuilder.addJavadoc("Uri Route\n@author lei.chuguang Email:475825657@qq.com from pxjy");
+        classBuilder.addJavadoc("Uri Route\n@author lei.chuguang Email:475825657@qq.com");
         addMethodContent();
         methodBuilder.addStatement("return false");
         classBuilder.addMethod(methodBuilder.build());
@@ -103,7 +104,6 @@ public class RouteGenerator {
         Set<Map.Entry<String, ArrayList<ExecutableElement>>> entries = map.entrySet();
         for (Map.Entry<String, ArrayList<ExecutableElement>> entry : entries) {
             methodBuilder.beginControlFlow("if(\"" + entry.getKey() + "\".equals(path))");
-            methodBuilder.addStatement("$T<String> strings", Constant.LIST_CLASS);
             //
             ArrayList<ExecutableElement> value = entry.getValue();
             for (ExecutableElement method : value) {
@@ -112,7 +112,9 @@ public class RouteGenerator {
                 boolean haveParameters = parameters.size() > 1;
                 //
                 for (VariableElement parameter : parameters) {
-                    if (typeUtils.isSubtype(parameter.asType(), typeBaseActivity)) {
+                    TypeMirror type = parameter.asType();
+                    if (typeUtils.isSubtype(type, typeActivity)) {
+                        methodBuilder.addStatement("if (!(activity instanceof " + type.toString() + ")) return false");
                         continue;
                     }
                     //
@@ -126,57 +128,33 @@ public class RouteGenerator {
                 //
                 sb.delete(0, sb.length());
                 for (VariableElement parameter : parameters) {
-                    if (typeUtils.isSubtype(parameter.asType(), typeBaseActivity)) {
-                        sb.append(",activity");
+                    TypeMirror type = parameter.asType();
+                    String typeString = type.toString();
+                    if (typeUtils.isSubtype(type, typeActivity)) {
+                        sb.append(",(").append(typeString).append(")activity");
                         continue;
                     }
                     //
                     String name = parameter.getSimpleName().toString();
                     methodBuilder.addStatement("String " + name + " = uri.getQueryParameter(\"" + name + "\")");
                     //
-                    String changeString;
-                    switch (parameter.asType().toString()) {
-                        case "int":
-                        case "java.lang.Integer":
-                            changeString = "Integer.parseInt(" + name + ")";
-                            break;
-                        case "long":
-                        case "java.lang.Long":
-                            changeString = "Long.parseLong(" + name + ")";
-                            break;
-                        case "char":
-                        case "java.lang.Character":
-                            changeString = "Character.parseCharacter(" + name + ")";
-                            break;
-                        case "short":
-                        case "java.lang.Short":
-                            changeString = "Short.parseShort(" + name + ")";
-                            break;
-                        case "byte":
-                        case "java.lang.Byte":
-                            changeString = "Byte.parseByte(" + name + ")";
-                            break;
-                        case "float":
-                        case "java.lang.Float":
-                            changeString = "Float.parseFloat(" + name + ")";
-                            break;
-                        case "double":
-                        case "java.lang.Double":
-                            changeString = "Double.parseDouble(" + name + ")";
-                            break;
-                        case "boolean":
-                        case "java.lang.Boolean":
-                            changeString = "Boolean.parseBoolean(" + name + ")";
-                            break;
-                        default:
-                            changeString = name;
-                            break;
-                    }
+                    String changeString = switch (typeString) {
+                        case "int", "java.lang.Integer" -> "Integer.parseInt(" + name + ")";
+                        case "long", "java.lang.Long" -> "Long.parseLong(" + name + ")";
+                        case "char", "java.lang.Character" ->
+                                "Character.parseCharacter(" + name + ")";
+                        case "short", "java.lang.Short" -> "Short.parseShort(" + name + ")";
+                        case "byte", "java.lang.Byte" -> "Byte.parseByte(" + name + ")";
+                        case "float", "java.lang.Float" -> "Float.parseFloat(" + name + ")";
+                        case "double", "java.lang.Double" -> "Double.parseDouble(" + name + ")";
+                        case "boolean", "java.lang.Boolean" -> "Boolean.parseBoolean(" + name + ")";
+                        default -> name;
+                    };
                     sb.append(",").append(changeString);
                 }
                 //
                 Element element = method.getEnclosingElement();
-                methodBuilder.addStatement(TypeName.get(element.asType()) + "." + method.getSimpleName().toString() + "(" + sb.substring(1) + ")");
+                methodBuilder.addStatement(TypeName.get(element.asType()) + "." + method.getSimpleName() + "(" + sb.substring(1) + ")");
                 //
                 methodBuilder.addStatement("return true");
                 if (haveParameters) methodBuilder.endControlFlow();
