@@ -1,6 +1,6 @@
 # AutoField插件
 
-*版本号：V3.1*
+*版本号：V3.2*
 
 **本开源库包含四个部分：注解、APT、plugin和一个APP demo。**
 

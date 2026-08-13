@@ -48,7 +48,6 @@ class AutoFieldClassVisitor extends ClassNode {
         }
         Set<String> hierarchy = new HashSet<>(superClasses)
         if (originalSuperName != null) hierarchy.add(originalSuperName)
-        println("Visiting class $name with super class ${hierarchy.toListString()}")
         if (hierarchy.contains('android/app/Activity')) {
             transformActivity(hasAutoFields)
         } else if (hierarchy.any { it in ['android/app/Fragment', 'androidx/fragment/app/Fragment'] }) {
