@@ -1,6 +1,3 @@
-group group
-version version
-
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 
