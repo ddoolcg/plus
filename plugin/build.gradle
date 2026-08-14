@@ -1,19 +1,21 @@
 apply plugin: 'groovy'
 apply plugin: 'maven-publish'
 
-sourceSets {
-    main {
-        groovy {
-            exclude 'com/lcg/plugin/AutoFieldTransform.groovy'
-            exclude 'com/lcg/plugin/ActivityAutoFieldTransform.groovy'
-            exclude 'com/lcg/plugin/FragmentAutoFieldTransform.groovy'
-            exclude 'com/lcg/plugin/ObserverAutoFieldTransform.groovy'
-        }
-    }
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 11
+}
+
+tasks.withType(GroovyCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_11.toString()
+    targetCompatibility = JavaVersion.VERSION_11.toString()
 }
 
 buildscript {
-
     repositories {
         google()
         mavenCentral()
@@ -23,10 +25,8 @@ buildscript {
 dependencies {
     implementation gradleApi()
     implementation localGroovy()
-    implementation 'com.android.tools.build:gradle-api:9.1.0'
+    compileOnly 'com.android.tools.build:gradle-api:9.1.0'
     implementation 'org.ow2.asm:asm-tree:9.7.1'
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.ow2.asm:asm-util:9.7.1'
 }
 
 afterEvaluate {
