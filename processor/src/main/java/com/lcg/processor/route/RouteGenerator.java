@@ -138,18 +138,44 @@ public class RouteGenerator {
                     String name = parameter.getSimpleName().toString();
                     methodBuilder.addStatement("String " + name + " = uri.getQueryParameter(\"" + name + "\")");
                     //
-                    String changeString = switch (typeString) {
-                        case "int", "java.lang.Integer" -> "Integer.parseInt(" + name + ")";
-                        case "long", "java.lang.Long" -> "Long.parseLong(" + name + ")";
-                        case "char", "java.lang.Character" ->
-                                "Character.parseCharacter(" + name + ")";
-                        case "short", "java.lang.Short" -> "Short.parseShort(" + name + ")";
-                        case "byte", "java.lang.Byte" -> "Byte.parseByte(" + name + ")";
-                        case "float", "java.lang.Float" -> "Float.parseFloat(" + name + ")";
-                        case "double", "java.lang.Double" -> "Double.parseDouble(" + name + ")";
-                        case "boolean", "java.lang.Boolean" -> "Boolean.parseBoolean(" + name + ")";
-                        default -> name;
-                    };
+                    String changeString;
+                    switch (parameter.asType().toString()) {
+                        case "int":
+                        case "java.lang.Integer":
+                            changeString = "Integer.parseInt(" + name + ")";
+                            break;
+                        case "long":
+                        case "java.lang.Long":
+                            changeString = "Long.parseLong(" + name + ")";
+                            break;
+                        case "char":
+                        case "java.lang.Character":
+                            changeString = "Character.parseCharacter(" + name + ")";
+                            break;
+                        case "short":
+                        case "java.lang.Short":
+                            changeString = "Short.parseShort(" + name + ")";
+                            break;
+                        case "byte":
+                        case "java.lang.Byte":
+                            changeString = "Byte.parseByte(" + name + ")";
+                            break;
+                        case "float":
+                        case "java.lang.Float":
+                            changeString = "Float.parseFloat(" + name + ")";
+                            break;
+                        case "double":
+                        case "java.lang.Double":
+                            changeString = "Double.parseDouble(" + name + ")";
+                            break;
+                        case "boolean":
+                        case "java.lang.Boolean":
+                            changeString = "Boolean.parseBoolean(" + name + ")";
+                            break;
+                        default:
+                            changeString = name;
+                            break;
+                    }
                     sb.append(",").append(changeString);
                 }
                 //
